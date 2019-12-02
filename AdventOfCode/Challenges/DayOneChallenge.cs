@@ -1,10 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace AdventOfCode.Challenges
 {
     public static class DayOneChallenge
     {
-        public static int RunChallenge()
+        public static void RunChallenge()
         {
             int sum = 0;
 
@@ -14,7 +15,7 @@ namespace AdventOfCode.Challenges
                 sum += CalculateFuelForMass(mass);
             }
 
-            return sum;
+            Console.WriteLine(sum);
         }
 
         private static int CalculateFuelForMass(int mass)

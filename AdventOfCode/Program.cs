@@ -1,5 +1,4 @@
 ﻿using AdventOfCode.Challenges;
-using System;
 
 namespace AdventOfCode
 {
@@ -7,7 +6,9 @@ namespace AdventOfCode
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(DayOneChallenge.RunChallenge());
+            //DayOneChallenge.RunChallenge();
+            //DayTwoChallenge.RunChallenge1();
+            DayTwoChallenge.RunChallenge2();
         }
     }
 }
