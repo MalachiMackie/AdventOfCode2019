@@ -9,7 +9,9 @@ namespace AdventOfCode
             //DayOneChallenge.RunChallenge();
             //DayTwoChallenge.RunChallenge1();
             //DayTwoChallenge.RunChallenge2();
-            DayThreeChallenge.RunChallenge2();
+            //DayThreeChallenge.RunChallenge1();
+            //DayThreeChallenge.RunChallenge2();
+            DayFourChallenge.RunChallenge();
         }
     }
 }
