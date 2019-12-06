@@ -11,7 +11,8 @@ namespace AdventOfCode
             //DayTwoChallenge.RunChallenge2();
             //DayThreeChallenge.RunChallenge1();
             //DayThreeChallenge.RunChallenge2();
-            DayFourChallenge.RunChallenge();
+            //DayFourChallenge.RunChallenge();
+            DayFiveChallenge.RunChallenge();
         }
     }
 }

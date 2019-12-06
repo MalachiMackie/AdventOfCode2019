@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Linq;
 
 namespace AdventOfCode.Challenges
 {
@@ -12,16 +13,22 @@ namespace AdventOfCode.Challenges
             IMMEDIATE
         }
 
-        private static int ProcessIntCode(int[] intCode)
+        private static int[] GetInput()
         {
-            int i = 1;
+            string text = File.ReadAllText("input/dayFive.txt");
+            return text.Split(',').Select(x => int.Parse(x)).ToArray();
+        }
+
+        private static void ProcessIntCode(int[] intCode)
+        {
+            int i = 0;
 
             while(i < intCode.Length)
             {
                 var fullInstruction = intCode[i];
                 var instructionString = fullInstruction.ToString();
                 var digits = new int[instructionString.Length];
-                for (int j = 0; j < 6; j++)
+                for (int j = 0; j < digits.Length; j++)
                 {
                     char myChar = instructionString[j];
                     digits[j] = int.Parse($"{myChar}");
@@ -30,7 +37,8 @@ namespace AdventOfCode.Challenges
                 int instruction = digits[^1];
                 if(digits.Length > 1)
                 {
-                    instruction += digits[^2] * 10;
+                    var a = digits[^2];
+                    instruction += (a * 10);
                 }
 
                 var modes = new List<ParameterMode>();
@@ -47,34 +55,125 @@ namespace AdventOfCode.Challenges
                     //Add
                     case 1:
                         {
-                            int pos1 = intCode[i + 1];
-                            int pos2 = intCode[i + 2];
-                            int pos3 = intCode[i + 3];
-                            intCode[pos3] = intCode[pos1] + intCode[pos2];
+                            int input1 = intCode[i + 1];
+                            int input2 = intCode[i + 2];
+                            int output = intCode[i + 3];
+
+                            ParameterMode input1Mode = modes.Count >= 1 ? modes[0] : ParameterMode.POSITION;
+                            ParameterMode input2Mode = modes.Count >= 2 ? modes[1] : ParameterMode.POSITION;
+
+                            int inputValue1 = input1Mode == ParameterMode.IMMEDIATE ? input1 : intCode[input1];
+                            int inputValue2 = input2Mode == ParameterMode.IMMEDIATE ? input2 : intCode[input2];
+
+                            intCode[output] = inputValue1 + inputValue2;
                             i += 4;
                             break;
                         }
                     //Multiply
                     case 2:
                         {
-                            int pos1 = intCode[i + 1];
-                            int pos2 = intCode[i + 2];
-                            int pos3 = intCode[i + 3];
-                            intCode[pos3] = intCode[pos1] * intCode[pos2];
+                            int input1 = intCode[i + 1];
+                            int input2 = intCode[i + 2];
+                            int output = intCode[i + 3];
+
+                            ParameterMode input1Mode = modes.Count >= 1 ? modes[0] : ParameterMode.POSITION;
+                            ParameterMode input2Mode = modes.Count >= 2 ? modes[1] : ParameterMode.POSITION;
+
+                            int inputValue1 = input1Mode == ParameterMode.IMMEDIATE ? input1 : intCode[input1];
+                            int inputValue2 = input2Mode == ParameterMode.IMMEDIATE ? input2 : intCode[input2];
+
+                            intCode[output] = inputValue1 * inputValue2;
                             i += 4;
                             break;
                         }
                     case 3:
                         {
-                            int pos1 = intCode[i + i];
-                            intCode[pos1] = pos1;
+                            Console.Write("Please give input: ");
+                            int input = int.Parse(Console.ReadLine());
+
+                            intCode[intCode[i + 1]] = input;
                             i += 2;
                             break;
                         }
                     case 4:
                         {
-                            int pos1 = intCode[i + 1];
-                            Console.WriteLine(pos1);
+                            var a = intCode[intCode[i + 1]];
+                            Console.WriteLine(a);
+                            i += 2;
+                            break;
+                        }
+                    case 5:
+                        {
+                            int input1 = intCode[i + 1];
+                            int input2 = intCode[i + 2];
+
+                            ParameterMode input1Mode = modes.Count >= 1 ? modes[0] : ParameterMode.POSITION;
+                            ParameterMode input2Mode = modes.Count >= 2 ? modes[1] : ParameterMode.POSITION;
+
+                            int inputValue1 = input1Mode == ParameterMode.IMMEDIATE ? input1 : intCode[input1];
+                            int inputValue2 = input2Mode == ParameterMode.IMMEDIATE ? input2 : intCode[input2];
+
+                            if(inputValue1 != 0)
+                            {
+                                i = inputValue2;
+                            }
+                            else
+                            {
+                                i += 3;
+                            }
+                            break;
+                        }
+                    case 6:
+                        {
+                            int input1 = intCode[i + 1];
+                            int input2 = intCode[i + 2];
+
+                            ParameterMode input1Mode = modes.Count >= 1 ? modes[0] : ParameterMode.POSITION;
+                            ParameterMode input2Mode = modes.Count >= 2 ? modes[1] : ParameterMode.POSITION;
+
+                            int inputValue1 = input1Mode == ParameterMode.IMMEDIATE ? input1 : intCode[input1];
+                            int inputValue2 = input2Mode == ParameterMode.IMMEDIATE ? input2 : intCode[input2];
+
+                            if(inputValue1 == 0)
+                            {
+                                i = inputValue2;
+                            }
+                            else
+                            {
+                                i += 3;
+                            }
+                            break;
+                        }
+                    case 7:
+                        {
+                            int input1 = intCode[i + 1];
+                            int input2 = intCode[i + 2];
+                            int output = intCode[i + 3];
+
+                            ParameterMode input1Mode = modes.Count >= 1 ? modes[0] : ParameterMode.POSITION;
+                            ParameterMode input2Mode = modes.Count >= 2 ? modes[1] : ParameterMode.POSITION;
+
+                            int inputValue1 = input1Mode == ParameterMode.IMMEDIATE ? input1 : intCode[input1];
+                            int inputValue2 = input2Mode == ParameterMode.IMMEDIATE ? input2 : intCode[input2];
+
+                            intCode[output] = inputValue1 < inputValue2 ? 1 : 0;
+                            i += 4;
+                            break;
+                        }
+                    case 8:
+                        {
+                            int input1 = intCode[i + 1];
+                            int input2 = intCode[i + 2];
+                            int output = intCode[i + 3];
+
+                            ParameterMode input1Mode = modes.Count >= 1 ? modes[0] : ParameterMode.POSITION;
+                            ParameterMode input2Mode = modes.Count >= 2 ? modes[1] : ParameterMode.POSITION;
+
+                            int inputValue1 = input1Mode == ParameterMode.IMMEDIATE ? input1 : intCode[input1];
+                            int inputValue2 = input2Mode == ParameterMode.IMMEDIATE ? input2 : intCode[input2];
+
+                            intCode[output] = inputValue1 == inputValue2 ? 1 : 0;
+                            i += 4;
                             break;
                         }
                     //Exit
@@ -85,7 +184,7 @@ namespace AdventOfCode.Challenges
                         }
                     default:
                         {
-                            throw new InvalidOperationException($"{intCode[i]} is not an instruction");
+                            throw new InvalidOperationException($"{instruction} is not an instruction");
                         }
                 }
                 if (doBreak)
@@ -93,7 +192,12 @@ namespace AdventOfCode.Challenges
                     break;
                 }
             }
-            return intCode[0];
+        }
+
+        public static void RunChallenge()
+        {
+            int[] input = GetInput();
+            ProcessIntCode(input);
         }
     }
 }
